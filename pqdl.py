@@ -277,7 +277,7 @@ with -d -l to get the friendly name or other parameters.""")
                       "that can't be removed like My Finds.", default=False,
                       action='store_true')
     parser.add_option('--noupdate', help="Skip the online update check. Please "
-                      "make sure to check updates yourself!", default=False,
+                      "make sure to check updates yourself!", default=True,
                       action='store_true')
     parser.add_option('--nobrowser', help="Don't open the browser on new "
                       "versions. The browser will be opened only once even "
