@@ -570,9 +570,9 @@ class PqBrowser(mechanize.Browser):
         #for f in self.forms():
         #   print f
         self.select_form(nr=0)
-        self.form['ctl00$ContentBody$tbUsername'] = username
-        self.form['ctl00$ContentBody$tbPassword'] = password        
-        self.submit(name="ctl00$ContentBody$btnSignIn")
+        self.form['Username'] = username
+        self.form['Password'] = password        
+        self.submit()
         
 
         response = self.response().read()
