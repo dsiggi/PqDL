@@ -23,6 +23,7 @@ need to do it by hand or with this script.
 This script is written by leoluk.
 Please look at www.leoluk.de/paperless-caching/pqdl for updates.
 
+This tool is no longer maintained by leolux. This is a fork which i try to keep working.
 """
 
 __version__ = "0.3.5.2"
