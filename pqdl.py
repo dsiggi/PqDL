@@ -27,7 +27,7 @@ Please look at www.leoluk.de/paperless-caching/pqdl for updates.
 
 __version__ = "0.3.5.2"
 __status__ = "stable"
-__author__ = "Leopold Schabel (maintained by ChristianGK)"
+__author__ = "Leopold Schabel (leoluk) - maintained by ChristianGK"
 
 ### pylint
 # pylint: disable-msg=E1102, W0142
@@ -1000,8 +1000,10 @@ def main():
         raw_input('Press any key to exit.')
 
 if __name__ == "__main__":
-    logging.info("PQdl v%s (%s) by leoluk. Updates and help on "
-                 "www.leoluk.de/paperless-caching/pqdl" ,
-                 __version__, __status__)
+    logging.info("""  PQdl v%s (%s) by %s.
+                 Updates, code and help on   https://github.com/ChristianGK-GC/PqDL
+                 """ ,
+                 __version__, __status__, __author__)
+                 #  Updates and help on www.leoluk.de/paperless-caching/pqdl  # still DOWN
     main()
     logging.info("Done")
