@@ -1001,10 +1001,10 @@ def main():
         raw_input('Press any key to exit.')
 
 if __name__ == "__main__":
-    logging.info("""  PQdl v%s (%s) by %s.
-                 Updates, code and help on   https://github.com/ChristianGK-GC/PqDL
-                 """ ,
+    logging.info("""PQdl v%s (%s) by %s.
+               Updates, code and help on   https://github.com/ChristianGK-GC/PqDL
+               Old Information: Updates and help on www.leoluk.de/paperless-caching/pqdl but still DOWN """ ,
                  __version__, __status__, __author__)
-                 #  Updates and help on www.leoluk.de/paperless-caching/pqdl  # still DOWN
+                 
     main()
     logging.info("Done")
