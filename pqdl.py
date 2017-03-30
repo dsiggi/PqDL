@@ -27,7 +27,7 @@ Please look at www.leoluk.de/paperless-caching/pqdl for updates.
 
 __version__ = "0.3.5.2"
 __status__ = "stable"
-__author__ = "Leopold Schabel"
+__author__ = "Leopold Schabel (maintained by ChristianGK)"
 
 ### pylint
 # pylint: disable-msg=E1102, W0142
