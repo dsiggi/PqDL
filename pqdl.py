@@ -1004,7 +1004,7 @@ if __name__ == "__main__":
     logging.info("""PQdl v%s (%s) by %s.
                Updates, code and help on   https://github.com/ChristianGK-GC/PqDL
                Old Information: Updates and help on www.leoluk.de/paperless-caching/pqdl but still DOWN """ ,
-                 __version__, __status__, __author__)
+               __version__, __status__, __author__)
                  
     main()
     logging.info("Done")
