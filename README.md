@@ -1,4 +1,6 @@
 # PqDL
+(23.12.2017)
+* Login is working again
 
 (27.04.2017)
 * Binary added. Thanks to Geo Chief

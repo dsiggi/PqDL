@@ -570,11 +570,25 @@ class PqBrowser(mechanize.Browser):
                   % urlbase)
         #for f in self.forms():
         #   print f
-        self.select_form(nr=0)
+
+        #find the login form dynamically by looking for
+        #for a form containing the input field "Username"
+        for each_form in self.forms():
+            try:
+               username_field = each_form.find_control("Username")
+               if not username_field is None:
+	           self.form = each_form
+	           break
+            except mechanize._form.ControlNotFoundError:
+               continue
+
+        if self.form is None:
+            logger.error("Could not find login form on page ... aborting login")
+            return
+
         self.form['Username'] = username
         self.form['Password'] = password        
         self.submit()
-        
 
         response = self.response().read()
         logger.log(5, response)
