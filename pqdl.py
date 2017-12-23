@@ -204,9 +204,9 @@ def rename(source, dest, *args, **kwargs):
     logger = logging.getLogger('tool.rename')
     try:
         os.rename(source, dest, *args, **kwargs)
-        logger.info("Renaming {0} to {1}".format(source, dest))
+        logger.info(u"Renaming {0} to {1}".format(source, dest))
     except WindowsError:
-        logger.exception('Renaming {0} to {1} failed'.format(source, dest))
+        logger.exception(u'Renaming {0} to {1} failed'.format(source, dest))
 
 
 def remove(path, *args, **kwargs):
@@ -708,7 +708,7 @@ def get_mapstr(mparser, link):
     if mparser.has_section('Map'):
         for key in ('chkdelete', 'friendlyname', 'name', 'date', 'count'):
             if mparser.has_option('Map', link[key]):
-                logger.debug("Map entry \"%s\" (%s) found for %s" % (link[key],
+                logger.debug(u"Map entry \"%s\" (%s) found for %s" % (link[key],
                                             key, link['friendlyname']))
                 return mparser.get('Map', link[key])
         return ""
@@ -722,7 +722,7 @@ def check_linkmatch(link, linklist):
     for key in ('chkdelete', 'friendlyname', 'name', 'date', 'count'):
         for arg in linklist:
             if fnmatch.fnmatch(link[key], arg):
-                logger.debug('"%s" matches "%s" as %s for %s' % (link[key],
+                logger.debug(u'"%s" matches "%s" as %s for %s' % (link[key],
                                             arg, key, link['friendlyname']))
                 result = True
     return result
@@ -754,7 +754,7 @@ def main():
     if not opts.noupdate:
         check_update(opts.nobrowser)
     else:
-        logger.info("Update check skipped. Please check for updates yourself!")
+        logger.info(u"Update check skipped. Please check for updates yourself!")
 
     if not os.path.exists(opts.outputdir):
         os.makedirs(opts.outputdir)
@@ -775,7 +775,7 @@ def main():
         browser.pqsimulate = True
         browser.pqfile = opts.pqsitefile
     else:
-        logger.info("Logging in as {username}".format(username=opts.username))
+        logger.info(u"Logging in as {username}".format(username=opts.username))
         browser.login_gc(opts.username, opts.password,
                          RAW_BASE_URL % ("s" if (opts.loginsecure or
                                          opts.allsecure )
@@ -783,15 +783,15 @@ def main():
         delay()
 
     logger = logging.getLogger('main.linkdb')
-    logger.info("Getting links")
+    logger.info(u"Getting links")
     linklist = browser.get_link_db(not opts.nospecial)
     delay()
     os.chdir(opts.outputdir)
     if logger.getEffectiveLevel() <= 10:
         for link in linklist:
-            logger.debug("Data for %s:" % link['friendlyname'])
+            logger.debug(u"Data for %s:" % link['friendlyname'])
             for field, data in link.iteritems():
-                logger.debug('%s - %s: %s' % (link['friendlyname'], field,
+                logger.debug(u'%s - %s: %s' % (link['friendlyname'], field,
                                               data))
 
     logger = logging.getLogger('main.linkdb.sync')
@@ -800,9 +800,9 @@ def main():
         journal = True
         cparser = ConfigParser.RawConfigParser()
         cfiles = cparser.read([opts.journalfile])
-        logger.debug("Journal: %s" % cfiles)
+        logger.debug(u"Journal: %s" % cfiles)
         if opts.resetjournal:
-            logger.info("Resetting journal...")
+            logger.info(u"Resetting journal...")
             if cparser.has_section('Log'):
                 cparser.remove_section('Log')
     else:
@@ -811,31 +811,31 @@ def main():
     if opts.mappings:
         mparser = ConfigParser.RawConfigParser()
         mfiles = mparser.read([opts.mapfile])
-        logger.debug("Mappings: %s" %mfiles)
+        logger.debug(u"Mappings: %s" %mfiles)
 
     if opts.myfinds:
         browser.trigger_myfinds()
 
     logger = logging.getLogger('main.select')
-    logger.info("Selecting files")
+    logger.info(u"Selecting files")
 
     if (logger.getEffectiveLevel() > 10) and len(args):
-        logger.info("NOTE: please enable debug (-d) if you want to see what "
+        logger.info(u"NOTE: please enable debug (-d) if you want to see what "
                     "includes/excludes do or if they don't work as expected!")
 
     if linklist == []:
-        logger.info("No valid Pocket Queries found online.")
+        logger.info(u"No valid Pocket Queries found online.")
         dllist = []
     else:
         if not len(args):
-            logger.debug("No include arguments given, downloading all PQs.")
+            logger.debug(u"No include arguments given, downloading all PQs.")
         dllist = []
         for link in linklist:
             assert isinstance(args, list)
             if journal:
                 try:
                     if cparser.get('Log', link['chkdelete']) == link['date']:
-                        logger.info('"{name}" skipped because {friendlyname} '
+                        logger.info(u'"{name}" skipped because {friendlyname} '
                                     'with date {date} has already been '
                                     'downloaded.'.format(**link))
                         continue
@@ -843,19 +843,19 @@ def main():
                         ConfigParser.NoSectionError):
                     pass
             if (check_linkmatch(link, excludes)):
-                logger.info('"{name}" skipped because it is is exluded.'.
+                logger.info(u'"{name}" skipped because it is is exluded.'.
                             format(name=link['name']))
                 continue
             if (check_linkmatch(link, args)) | (args == []):
-                logger.info('"{name}" ({date}) will be downloaded'.
+                logger.info(u'"{name}" ({date}) will be downloaded'.
                             format(**link))
                 dllist.append(link)
             else:
-                logger.debug('"{name}" skipped because it is not in the '
+                logger.debug(u'"{name}" skipped because it is not in the '
                 'arguments list.'.format(**link))
         if dllist == []:
-            logger.info("All PQs skipped." if logger.getEffectiveLevel() <= 10
-                        else "All PQs skipped. If you want to know why, "
+            logger.info(u"All PQs skipped." if logger.getEffectiveLevel() <= 10
+                        else u"All PQs skipped. If you want to know why, "
                         "enable debug (-d)!")
 
     logger = logging.getLogger('main.download')
@@ -868,17 +868,17 @@ def main():
         sys.stdout.flush()
 
     if opts.list:
-        logger.info("Downloads skipped!")
+        logger.info(u"Downloads skipped!")
         dllist = []
     for number, link in enumerate(dllist):
         if link['name'] != link['friendlyname']:
-            logger.info('Downloading {0}/{1}: "{name}" (Friendly Name: '
+            logger.info(u'Downloading {0}/{1}: "{name}" (Friendly Name: '
                         '{friendlyname}) ({size}) [{date}]'.
                         format(number+1, len(dllist), **link))
         else:
-            logger.info('Downloading {0}/{1}: "{name}" ({size}) [{date}]'.
+            logger.info(u'Downloading {0}/{1}: "{name}" ({size}) [{date}]'.
                         format(number+1, len(dllist), **link))
-        filename = '{friendlyname}.pqtmp'.format(**link)
+        filename = u'{friendlyname}.pqtmp'.format(**link)
         link['filename'] = filename
         delay()
 
@@ -929,9 +929,9 @@ def main():
 
 
     logger = logging.getLogger('main.process')
-    logger.info("Processing downloaded files")
+    logger.info(u"Processing downloaded files")
     if dllist == []:
-        logger.info("No downloads to process")
+        logger.info(u"No downloads to process")
     for link in dllist:
         template = FilenameDict(link, 'zip')
         link['mapstr'] = (get_mapstr(mparser, link) + opts.sep if opts.mappings
@@ -943,15 +943,15 @@ def main():
 
     if opts.unzip:
         logger = logging.getLogger('main.unzip')
-        logger.info("Unzipping the downloaded files")
+        logger.info(u"Unzipping the downloaded files")
         for link in dllist:
             template = FilenameDict(link,'gpx')
-            logger.info("Unzipping {realfilename}".format(**link))
+            logger.info(u"Unzipping {realfilename}".format(**link))
 
             zfile = zipfile.ZipFile(link['realfilename'])
             for info in zfile.infolist():
                 isinstance(info, zipfile.ZipInfo)
-                logger.debug("{filename} (size: {size})".
+                logger.debug(u"{filename} (size: {size})".
                              format(filename=info.filename,
                                     size=info.file_size))
                 zfile.extract(info)
@@ -974,13 +974,13 @@ def main():
 
     if opts.remove:
         logger = logging.getLogger('main.removegc')
-        logger.info("Removing downloaded files from GC.com")
+        logger.info(u"Removing downloaded files from GC.com")
         rmlist = []
         if dllist == []:
             logger.info("No files to remove.")
         for link in dllist:
             if link['type'] == 'nodelete':
-                logger.warning("MyFinds Pocket Query can't be removed. "
+                logger.warning(u"MyFinds Pocket Query can't be removed. "
                                "If you want to exclude it in future runs, "
                                "use -n")
                 continue
@@ -992,12 +992,12 @@ def main():
             if opts.ctl != 'search':
                 ctl = opts.ctl
             else:
-                logger.debug("Searching CTL value...")
+                logger.debug(u"Searching CTL value...")
                 ctl = browser.find_ctl()
-                logger.debug("Found value %s" % ctl)
-            logger.info("Sending removal request...")
+                logger.debug(u"Found value %s" % ctl)
+            logger.info(u"Sending removal request...")
             browser.delete_pqs(rmlist, ctl)
-            logger.info("Removal request sent. If it didn't work, please report"
+            logger.info(u"Removal request sent. If it didn't work, please report"
                         " this a bug. Groundspeak makes so many changes on "
                         "their site that this feature is broken from time "
                         "to time.")
@@ -1005,7 +1005,7 @@ def main():
     logger = logging.getLogger('main')
     if opts.journal:
         try:
-            logger.debug("Writing journal file %s" % opts.journalfile)
+            logger.debug(u"Writing journal file %s" % opts.journalfile)
             cfile = open(opts.journalfile, 'w')
             cparser.write(cfile)
         finally:
@@ -1021,4 +1021,4 @@ if __name__ == "__main__":
                __version__, __status__, __author__)
                  
     main()
-    logging.info("Done")
+    logging.info(u"Done")
