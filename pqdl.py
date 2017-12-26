@@ -517,6 +517,11 @@ wildcards yet."""
 
     return opts, args
 
+def unicode_values_to_strings(dict_with_unicode_values):
+    dict_with_string_values = {}
+    for each_key in dict_with_unicode_values:
+        dict_with_string_values[each_key] = dict_with_unicode_values[each_key].encode('utf8')
+    return dict_with_string_values
 
 class PqDLError(Exception):
     """Generic error for PqDL errors."""
@@ -837,7 +842,7 @@ def main():
                     if cparser.get('Log', link['chkdelete']) == link['date']:
                         logger.info('"{name}" skipped because {friendlyname} '
                                     'with date {date} has already been '
-                                    'downloaded.'.format(**link))
+                                    'downloaded.'.format(**unicode_values_to_strings(link)))
                         continue
                 except (ConfigParser.NoOptionError,
                         ConfigParser.NoSectionError):
@@ -848,11 +853,11 @@ def main():
                 continue
             if (check_linkmatch(link, args)) | (args == []):
                 logger.info('"{name}" ({date}) will be downloaded'.
-                            format(**link))
+                            format(**unicode_values_to_strings(link)))
                 dllist.append(link)
             else:
                 logger.debug('"{name}" skipped because it is not in the '
-                'arguments list.'.format(**link))
+                'arguments list.'.format(**unicode_values_to_strings(link)))
         if dllist == []:
             logger.info("All PQs skipped." if logger.getEffectiveLevel() <= 10
                         else "All PQs skipped. If you want to know why, "
@@ -874,10 +879,10 @@ def main():
         if link['name'] != link['friendlyname']:
             logger.info('Downloading {0}/{1}: "{name}" (Friendly Name: '
                         '{friendlyname}) ({size}) [{date}]'.
-                        format(number+1, len(dllist), **link))
+                        format(number+1, len(dllist), **unicode_values_to_strings(link)))
         else:
             logger.info('Downloading {0}/{1}: "{name}" ({size}) [{date}]'.
-                        format(number+1, len(dllist), **link))
+                        format(number+1, len(dllist), **unicode_values_to_strings(link)))
         filename = '{friendlyname}.pqtmp'.format(**link)
         link['filename'] = filename
         delay()
@@ -946,7 +951,7 @@ def main():
         logger.info("Unzipping the downloaded files")
         for link in dllist:
             template = FilenameDict(link,'gpx')
-            logger.info("Unzipping {realfilename}".format(**link))
+            logger.info("Unzipping {realfilename}".format(**unicode_values_to_strings(link)))
 
             zfile = zipfile.ZipFile(link['realfilename'])
             for info in zfile.infolist():
@@ -987,7 +992,7 @@ def main():
             rmlist.append(link['chkdelete'])
             logger.info(
                 'Pocket Query "{name}" will be removed (ID: {chkdelete})'.
-                format(**link))
+                format(**unicode_values_to_strings(link)))
         if rmlist != []:
             if opts.ctl != 'search':
                 ctl = opts.ctl
