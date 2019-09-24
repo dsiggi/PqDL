@@ -26,9 +26,9 @@ Please look at www.leoluk.de/paperless-caching/pqdl for updates.
 This tool is no longer maintained by leolux. This is a fork which i try to keep working.
 """
 
-__version__ = "0.3.5.2"
+__version__ = "0.3.5.3"
 __status__ = "stable"
-__author__ = "Leopold Schabel (leoluk) - maintained by ChristianGK"
+__author__ = "Leopold Schabel (leoluk) - maintained by ChristianGK - changed by dsiggi"
 
 ### pylint
 # pylint: disable-msg=E1102, W0142
@@ -580,7 +580,7 @@ class PqBrowser(mechanize.Browser):
         #for a form containing the input field "Username"
         for each_form in self.forms():
             try:
-               username_field = each_form.find_control("Username")
+               username_field = each_form.find_control("UsernameOrEmail")
                if not username_field is None:
 	           self.form = each_form
 	           break
@@ -591,7 +591,7 @@ class PqBrowser(mechanize.Browser):
             logger.error("Could not find login form on page ... aborting login")
             return
 
-        self.form['Username'] = username
+        self.form['UsernameOrEmail'] = username
         self.form['Password'] = password        
         self.submit()
 
